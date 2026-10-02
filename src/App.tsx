@@ -7,11 +7,13 @@ import {
   Clock3,
   Mail,
   MapPin,
+  Menu,
   MessageCircleMore,
   PhoneCall,
   Scale,
   ShieldCheck,
   Users,
+  X,
 } from 'lucide-react'
 
 import { aboutPoints, advantages, contactDetails, heroStats, liveSchedule, navItems } from './data/site'
@@ -22,6 +24,7 @@ import { contactInfo } from './data/contact'
 function App() {
   const [openFaq, setOpenFaq] = useState<number | null>(0)
   const [toastVisible, setToastVisible] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -62,7 +65,45 @@ function App() {
             <PhoneCall size={16} />
             {contactDetails.phone}
           </a>
+
+          <button
+            type="button"
+            className="flex h-10 w-10 items-center justify-center border border-[var(--color-brand-950)] text-[var(--color-brand-950)] lg:hidden"
+            aria-label={mobileMenuOpen ? 'Tutup navigasi' : 'Buka navigasi'}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
         </div>
+
+        <nav
+          id="mobile-navigation"
+          className={`${mobileMenuOpen ? 'block' : 'hidden'} border-t border-[#d9d4cc] bg-white lg:hidden`}
+          aria-label="Navigasi utama"
+        >
+          <div className="section-shell flex flex-col py-2">
+            {navItems.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                className="border-b border-[#eeeae4] px-3 py-3 text-sm font-semibold text-[var(--color-brand-950)] last:border-b-0 hover:bg-slate-50"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {item.label}
+              </a>
+            ))}
+            <a
+              href={`tel:${contactDetails.phone.replace(/\s+/g, '')}`}
+              className="mt-2 inline-flex items-center gap-2 px-3 py-3 text-sm font-bold text-[var(--color-brand-950)]"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <PhoneCall size={16} />
+              {contactDetails.phone}
+            </a>
+          </div>
+        </nav>
       </header>
 
       <main>
